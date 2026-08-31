@@ -194,7 +194,7 @@ export class CreditMonitor {
                 }
             }
         } catch (error) {
-            console.error('[Antigravity Hub] Error checking credits:', error);
+            console.error('[Antigravity Core] Error checking credits:', error);
         }
     }
 

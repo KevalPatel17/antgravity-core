@@ -286,7 +286,7 @@ export class AutoSwitchEngine {
 
         // ── Show prominent warning ──
         const action = await vscode.window.showWarningMessage(
-            '⚠ Antigravity Hub: All accounts and models have exhausted their credits!',
+            '⚠ Antigravity Core: All accounts and models have exhausted their credits!',
             'Add Account',
             'Dismiss'
         );

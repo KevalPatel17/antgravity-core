@@ -9,7 +9,7 @@
  * Features:
  *   - Color-coded credit display (green/amber/red)
  *   - Animated "Switching..." indicator during transitions
- *   - Click to open the Antigravity Hub sidebar
+ *   - Click to open the Antigravity Core sidebar
  */
 
 import * as vscode from 'vscode';
@@ -65,12 +65,12 @@ export class StatusBarManager {
             STATUS_BAR_PRIORITY
         );
 
-        // Clicking the status bar item opens the Antigravity Hub sidebar
+        // Clicking the status bar item opens the Antigravity Core sidebar
         this.statusBarItem.command = 'antigravityHub.refresh';
 
         // Set initial state
-        this.statusBarItem.text = '$(zap) Antigravity Hub';
-        this.statusBarItem.tooltip = 'Antigravity Hub — Click to refresh';
+        this.statusBarItem.text = '$(zap) Antigravity Core';
+        this.statusBarItem.tooltip = 'Antigravity Core — Click to refresh';
 
         // Show the item immediately
         this.statusBarItem.show();
@@ -102,7 +102,7 @@ export class StatusBarManager {
 
         // Build a detailed tooltip
         this.statusBarItem.tooltip = new vscode.MarkdownString(
-            `**Antigravity Hub**\n\n` +
+            `**Antigravity Core**\n\n` +
             `Account: \`${account}\`\n\n` +
             `Model: \`${model}\`\n\n` +
             `Credits: **${credits}** remaining`
@@ -149,7 +149,7 @@ export class StatusBarManager {
             'statusBarItem.errorBackground'
         );
         this.statusBarItem.tooltip = new vscode.MarkdownString(
-            '**⚠ Antigravity Hub**\n\nAll accounts and models have exhausted their credits.'
+            '**⚠ Antigravity Core**\n\nAll accounts and models have exhausted their credits.'
         );
     }
 

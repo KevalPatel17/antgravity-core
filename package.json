@@ -1,17 +1,17 @@
 {
-  "name": "antigravity-hub",
-  "displayName": "Antigravity Hub",
+  "name": "antigravity-core",
+  "displayName": "Antigravity Core",
   "description": "Smart multi-account & credit manager for Antigravity — auto-switches accounts and models when credits run low.",
   "version": "1.0.0",
   "publisher": "AntgravityCore",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/AntgravityCore/antigravity-hub"
+    "url": "https://github.com/KevalPatel17/antgravity-core"
   },
-  "homepage": "https://github.com/AntgravityCore/antigravity-hub#readme",
+  "homepage": "https://github.com/KevalPatel17/antgravity-core#readme",
   "bugs": {
-    "url": "https://github.com/AntgravityCore/antigravity-hub/issues"
+    "url": "https://github.com/KevalPatel17/antgravity-core/issues"
   },
   "engines": {
     "vscode": "^1.85.0"
@@ -37,18 +37,18 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "antigravity-hub",
-          "title": "Antigravity Hub",
+          "id": "antigravity-core",
+          "title": "Antigravity Core",
           "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
-      "antigravity-hub": [
+      "antigravity-core": [
         {
           "type": "webview",
           "id": "antigravityHub.sidebarView",
-          "name": "Antigravity Hub"
+          "name": "Antigravity Core"
         }
       ]
     },
@@ -56,30 +56,30 @@
       {
         "command": "antigravityHub.refresh",
         "title": "Refresh Credits",
-        "category": "Antigravity Hub",
+        "category": "Antigravity Core",
         "icon": "$(refresh)"
       },
       {
         "command": "antigravityHub.toggleAutoSwitch",
         "title": "Toggle Auto Switch",
-        "category": "Antigravity Hub",
+        "category": "Antigravity Core",
         "icon": "$(sync)"
       },
       {
         "command": "antigravityHub.addAccount",
         "title": "Add Account",
-        "category": "Antigravity Hub",
+        "category": "Antigravity Core",
         "icon": "$(add)"
       },
       {
         "command": "antigravityHub.exportAll",
         "title": "Export All Sessions",
-        "category": "Antigravity Hub",
+        "category": "Antigravity Core",
         "icon": "$(export)"
       }
     ],
     "configuration": {
-      "title": "Antigravity Hub",
+      "title": "Antigravity Core",
       "properties": {
         "antigravityHub.autoSwitch.enabled": {
           "type": "boolean",

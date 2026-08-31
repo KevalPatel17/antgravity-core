@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * Antigravity Hub — Webview Provider
+ * Antigravity Core — Webview Provider
  * ═══════════════════════════════════════════════════════════════
  * 
  * Implements VS Code's WebviewViewProvider to host the sidebar
@@ -111,7 +111,7 @@ export interface WebviewCallbacks {
 // ─── AntigravityWebviewProvider ──────────────────────────────
 
 /**
- * Provides the sidebar webview panel for the Antigravity Hub.
+ * Provides the sidebar webview panel for the Antigravity Core.
  * 
  * Responsibilities:
  *   1. Load and display panel.html in the sidebar
@@ -344,7 +344,7 @@ export class AntigravityWebviewProvider implements vscode.WebviewViewProvider {
                 break;
 
             default:
-                console.warn('[Antigravity Hub] Unknown message type:', (message as any).type);
+                console.warn('[Antigravity Core] Unknown message type:', (message as any).type);
         }
     }
 
@@ -380,7 +380,7 @@ export class AntigravityWebviewProvider implements vscode.WebviewViewProvider {
             return htmlContent;
         } catch (error) {
             // Fallback: return a simple error message
-            console.error('[Antigravity Hub] Failed to load panel.html:', error);
+            console.error('[Antigravity Core] Failed to load panel.html:', error);
             return `
                 <!DOCTYPE html>
                 <html>
@@ -402,7 +402,7 @@ export class AntigravityWebviewProvider implements vscode.WebviewViewProvider {
                 </head>
                 <body>
                     <div>
-                        <p class="error">⚠ Failed to load Antigravity Hub panel.</p>
+                        <p class="error">⚠ Failed to load Antigravity Core panel.</p>
                         <p style="color: #8B949E; font-size: 11px;">
                             Check that panel.html exists in src/webview/
                         </p>

@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════
- * Antigravity Hub — Extension Entry Point
+ * Antigravity Core — Extension Entry Point
  * ═══════════════════════════════════════════════════════════════
  * 
  * Main entry point for the VS Code extension. This file:
@@ -39,7 +39,7 @@ let webviewProvider: AntigravityWebviewProvider | undefined;
  * @param context - The extension context provided by VS Code
  */
 export function activate(context: vscode.ExtensionContext): void {
-    console.log('[Antigravity Hub] Extension activating...');
+    console.log('[Antigravity Core] Extension activating...');
 
     // ══════════════════════════════════════════════════════════
     // 1. Initialize Core Components
@@ -326,7 +326,7 @@ export function activate(context: vscode.ExtensionContext): void {
         'antigravityHub.refresh',
         () => {
             refreshAll();
-            vscode.window.showInformationMessage('⚡ Antigravity Hub refreshed');
+            vscode.window.showInformationMessage('⚡ Antigravity Core refreshed');
         }
     );
     context.subscriptions.push(refreshCmd);
@@ -410,7 +410,7 @@ export function activate(context: vscode.ExtensionContext): void {
     });
     context.subscriptions.push(configChangeListener);
 
-    console.log('[Antigravity Hub] Extension activated successfully!');
+    console.log('[Antigravity Core] Extension activated successfully!');
 }
 
 // ─── Helper Functions ────────────────────────────────────────
@@ -442,7 +442,7 @@ function refreshAll(): void {
  * Cleans up all resources.
  */
 export function deactivate(): void {
-    console.log('[Antigravity Hub] Extension deactivating...');
+    console.log('[Antigravity Core] Extension deactivating...');
 
     creditMonitor?.dispose();
     statusBarManager?.dispose();

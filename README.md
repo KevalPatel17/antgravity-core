@@ -1,4 +1,4 @@
-# Antigravity Hub ⚡
+# Antigravity Core ⚡
 
 > Smart multi-account & credit manager for Antigravity — auto-switches accounts and models when credits run low.
 
@@ -52,12 +52,12 @@ Always-visible status bar item showing:
 ### From Open VSX (Recommended)
 1. Open **Cursor**, **VSCodium**, **Windsurf**, or any Open VSX compatible editor
 2. Go to Extensions (`Ctrl+Shift+X`)
-3. Search for **"Antigravity Hub"**
+3. Search for **"Antigravity Core"**
 4. Click **Install**
 
 ### From VSIX
 ```bash
-code --install-extension antigravity-hub-1.0.0.vsix
+code --install-extension antigravity-core-1.0.0.vsix
 ```
 
 ---
@@ -65,7 +65,7 @@ code --install-extension antigravity-hub-1.0.0.vsix
 ## Usage
 
 1. After installation, look for the **⚡** icon in the Activity Bar (left sidebar)
-2. Click it to open the **Antigravity Hub** panel
+2. Click it to open the **Antigravity Core** panel
 3. Your accounts and credits will appear automatically
 4. Toggle **Auto Switch** to enable automatic model/account switching
 
@@ -73,10 +73,10 @@ code --install-extension antigravity-hub-1.0.0.vsix
 
 | Command | Description |
 |---------|-------------|
-| `Antigravity Hub: Refresh Credits` | Re-fetch credit balances |
-| `Antigravity Hub: Toggle Auto Switch` | Enable/disable auto switching |
-| `Antigravity Hub: Add Account` | Add a new Antigravity account |
-| `Antigravity Hub: Export All Sessions` | Export sessions to JSON |
+| `Antigravity Core: Refresh Credits` | Re-fetch credit balances |
+| `Antigravity Core: Toggle Auto Switch` | Enable/disable auto switching |
+| `Antigravity Core: Add Account` | Add a new Antigravity account |
+| `Antigravity Core: Export All Sessions` | Export sessions to JSON |
 
 ---
 
@@ -119,8 +119,8 @@ Credits > threshold? ──── YES ──── Do nothing ✓
 
 ```bash
 # Clone the repo
-git clone https://github.com/AntgravityCore/antigravity-hub.git
-cd antigravity-hub
+git clone https://github.com/AntgravityCore/antigravity-core.git
+cd antigravity-core
 
 # Install dependencies
 npm install

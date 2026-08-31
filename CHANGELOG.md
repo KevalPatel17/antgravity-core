@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the **Antigravity Hub** extension will be documented in this file.
+All notable changes to the **Antigravity Core** extension will be documented in this file.
 
 ## [1.0.0] - 2026-08-31
 
