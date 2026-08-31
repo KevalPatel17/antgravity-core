@@ -1,0 +1,146 @@
+{
+  "name": "antigravity-hub",
+  "displayName": "Antigravity Hub",
+  "description": "Smart multi-account & credit manager for Antigravity — auto-switches accounts and models when credits run low.",
+  "version": "1.0.0",
+  "publisher": "AntgravityCore",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AntgravityCore/antigravity-hub"
+  },
+  "homepage": "https://github.com/AntgravityCore/antigravity-hub#readme",
+  "bugs": {
+    "url": "https://github.com/AntgravityCore/antigravity-hub/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "antigravity",
+    "credits",
+    "auto-switch",
+    "account-manager",
+    "cursor",
+    "windsurf",
+    "ai-credits"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "icon": "images/icon.png",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "antigravity-hub",
+          "title": "Antigravity Hub",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "antigravity-hub": [
+        {
+          "type": "webview",
+          "id": "antigravityHub.sidebarView",
+          "name": "Antigravity Hub"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "antigravityHub.refresh",
+        "title": "Refresh Credits",
+        "category": "Antigravity Hub",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "antigravityHub.toggleAutoSwitch",
+        "title": "Toggle Auto Switch",
+        "category": "Antigravity Hub",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "antigravityHub.addAccount",
+        "title": "Add Account",
+        "category": "Antigravity Hub",
+        "icon": "$(add)"
+      },
+      {
+        "command": "antigravityHub.exportAll",
+        "title": "Export All Sessions",
+        "category": "Antigravity Hub",
+        "icon": "$(export)"
+      }
+    ],
+    "configuration": {
+      "title": "Antigravity Hub",
+      "properties": {
+        "antigravityHub.autoSwitch.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic account/model switching when credits are low."
+        },
+        "antigravityHub.autoSwitch.creditThreshold": {
+          "type": "number",
+          "default": 5,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Switch when credits fall at or below this value."
+        },
+        "antigravityHub.autoSwitch.checkIntervalSeconds": {
+          "type": "number",
+          "default": 30,
+          "minimum": 10,
+          "maximum": 600,
+          "description": "How often (in seconds) to check credit balances."
+        },
+        "antigravityHub.autoSwitch.preferHighestCredits": {
+          "type": "boolean",
+          "default": true,
+          "description": "When switching, prefer the account/model with the most credits instead of the next in list."
+        },
+        "antigravityHub.autoSwitch.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a VS Code notification when an auto-switch occurs."
+        },
+        "antigravityHub.autoSwitch.modelPriority": {
+          "type": "array",
+          "default": [
+            "claude-sonnet",
+            "claude-haiku",
+            "gemini-pro",
+            "gemini-flash"
+          ],
+          "description": "Order of model preference for auto-switching."
+        },
+        "antigravityHub.dbPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to the Antigravity SQLite database. Leave empty for auto-detection."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish:ovsx": "ovsx publish"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.3.0",
+    "@vscode/vsce": "^2.22.0"
+  },
+  "dependencies": {}
+}

@@ -1,0 +1,43 @@
+# .github/workflows/publish.yml
+#
+# Automatically publishes the extension to Open VSX when a version tag is pushed.
+# Usage: git tag v1.0.0 && git push origin v1.0.0
+#
+# Required Secret: OPEN_VSX_TOKEN — your Open VSX personal access token
+
+name: Publish to Open VSX
+
+on:
+  push:
+    tags:
+      - "v*"   # Triggers on any tag like v1.0.0, v1.0.1, v2.0.0, etc.
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: Build and Publish
+
+    steps:
+      # ── Step 1: Check out the repository ──
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # ── Step 2: Set up Node.js ──
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # ── Step 3: Install dependencies ──
+      - name: Install dependencies
+        run: npm ci
+
+      # ── Step 4: Compile TypeScript ──
+      - name: Compile TypeScript
+        run: npm run compile
+
+      # ── Step 5: Publish to Open VSX ──
+      - name: Publish to Open VSX
+        uses: HaaLeo/publish-vscode-extension@v2
+        with:
+          pat: ${{ secrets.OPEN_VSX_TOKEN }}
