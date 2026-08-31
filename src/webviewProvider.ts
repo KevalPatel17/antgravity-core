@@ -67,6 +67,11 @@ export interface ActivateAccountMessage {
     accountId: string;
 }
 
+export interface RemoveAccountMessage {
+    type: 'removeAccount';
+    accountId: string;
+}
+
 export interface SaveSettingsMessage {
     type: 'saveSettings';
     settings: {
@@ -89,6 +94,7 @@ export interface SimpleMessage {
 export type InboundMessage =
     | ToggleAutoSwitchMessage
     | ActivateAccountMessage
+    | RemoveAccountMessage
     | SaveSettingsMessage
     | ReorderModelsMessage
     | SimpleMessage;
@@ -99,6 +105,7 @@ export type InboundMessage =
 export interface WebviewCallbacks {
     onToggleAutoSwitch: (enabled: boolean) => void;
     onActivateAccount: (accountId: string) => void;
+    onRemoveAccount: (accountId: string) => void;
     onSaveSettings: (settings: SaveSettingsMessage['settings']) => void;
     onRefresh: () => void;
     onClearHistory: () => void;
@@ -168,6 +175,11 @@ export class AntigravityWebviewProvider implements vscode.WebviewViewProvider {
 
         // ── Load the HTML content ──
         webviewView.webview.html = this._getHtmlContent(webviewView.webview);
+
+        // Immediately trigger refresh so the webview receives current data
+        if (this.callbacks.onRefresh) {
+            this.callbacks.onRefresh();
+        }
 
         // ── Set up message handling from the webview ──
         webviewView.webview.onDidReceiveMessage(
@@ -293,6 +305,14 @@ export class AntigravityWebviewProvider implements vscode.WebviewViewProvider {
                 if (this.callbacks.onActivateAccount) {
                     this.callbacks.onActivateAccount(
                         (message as ActivateAccountMessage).accountId
+                    );
+                }
+                break;
+
+            case 'removeAccount':
+                if (this.callbacks.onRemoveAccount) {
+                    this.callbacks.onRemoveAccount(
+                        (message as RemoveAccountMessage).accountId
                     );
                 }
                 break;

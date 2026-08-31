@@ -1,8 +1,8 @@
 {
   "name": "antigravity-core",
-  "displayName": "Antigravity Core",
-  "description": "Smart multi-account & credit manager for Antigravity — auto-switches accounts and models when credits run low.",
-  "version": "1.0.0",
+  "displayName": "Antigravity Core — Auto-Switch Models & Accounts",
+  "description": "Smart multi-account & credit manager — automatically switches models and accounts when prompting and limits run low.",
+  "version": "1.2.0",
   "publisher": "AntgravityCore",
   "license": "MIT",
   "repository": {
@@ -29,7 +29,8 @@
     "ai-credits"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onView:antigravityHub.sidebarView"
   ],
   "main": "./out/extension.js",
   "icon": "images/icon.png",

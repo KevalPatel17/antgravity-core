@@ -3,36 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src https: http: data: vscode-resource:; style-src 'unsafe-inline' https:; script-src 'unsafe-inline' vscode-resource:;" />
   <title>Antigravity Core</title>
   <style>
     /* ═══════════════════════════════════════════════════════════
-       CSS VARIABLES — Design Tokens
+       DARK BLACK DESIGN TOKENS
        ═══════════════════════════════════════════════════════════ */
     :root {
-      --bg-deep:       #0D1117;
-      --bg-card:       #161B22;
-      --bg-hover:      #21262D;
-      --border:        #30363D;
-      --accent:        #7C3AED;
-      --accent-hover:  #6D28D9;
-      --accent-light:  #9461FF;
-      --secondary:     #2563EB;
-      --success:       #16A34A;
-      --warning:       #D97706;
-      --danger:        #DC2626;
-      --text-primary:  #E6EDF3;
-      --text-secondary:#8B949E;
+      --bg-deep:       #121212;
+      --bg-card:       #1E1E1E;
+      --bg-inner:      #181818;
+      --bg-hover:      #262626;
+      --border:        #2E2E2E;
+      --border-subtle: #242424;
+      --blue-primary:  #1A73E8;
+      --blue-hover:    #1557B0;
+      --success:       #4CAF50;
+      --warning:       #F59E0B;
+      --danger:        #E53935;
+      --text-primary:  #FFFFFF;
+      --text-secondary:#9E9E9E;
+      --text-muted:    #757575;
       --font-stack:    system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      --font-mono:     'SF Mono', 'Cascadia Code', 'Consolas', monospace;
-      --radius:        8px;
-      --radius-sm:     4px;
-      --radius-pill:   20px;
+      --radius:        12px;
+      --radius-sm:     6px;
       --transition:    0.2s ease;
     }
 
-    /* ═══════════════════════════════════════════════════════════
-       BASE STYLES & RESET
-       ═══════════════════════════════════════════════════════════ */
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
@@ -44,46 +41,15 @@
       color: var(--text-primary);
       font-family: var(--font-stack);
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.4;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ─── Custom Scrollbar ──────────────────────────────────── */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 2px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
-    }
-
-    /* ─── Utility Classes ───────────────────────────────────── */
-    .section-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-    }
-
-    .flex-between {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .flex-center {
-      display: flex;
-      align-items: center;
-    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
 
     /* ═══════════════════════════════════════════════════════════
        HEADER
@@ -91,7 +57,7 @@
     .header {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
-      padding: 14px 16px;
+      padding: 12px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -107,14 +73,14 @@
     }
 
     .header-icon {
-      width: 28px;
-      height: 28px;
-      background: var(--accent);
+      width: 24px;
+      height: 24px;
+      background: #252525;
       border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 13px;
       flex-shrink: 0;
     }
 
@@ -150,128 +116,10 @@
     }
 
     /* ═══════════════════════════════════════════════════════════
-       ACTIVE ACCOUNT CARD
-       ═══════════════════════════════════════════════════════════ */
-    .active-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--accent);
-      border-radius: var(--radius);
-      margin: 12px 12px 0;
-      padding: 14px;
-    }
-
-    .active-card-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-
-    .active-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .active-email {
-      font-size: 12px;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    /* Status Pills */
-    .status-pill {
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: var(--radius-pill);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-    .status-pill.active {
-      background: rgba(22, 163, 74, 0.15);
-      color: var(--success);
-      border: 1px solid rgba(22, 163, 74, 0.3);
-    }
-    .status-pill.low {
-      background: rgba(217, 119, 6, 0.15);
-      color: var(--warning);
-      border: 1px solid rgba(217, 119, 6, 0.3);
-    }
-    .status-pill.exhausted {
-      background: rgba(220, 38, 38, 0.15);
-      color: var(--danger);
-      border: 1px solid rgba(220, 38, 38, 0.3);
-    }
-
-    /* Model row */
-    .model-row {
-      margin-top: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .model-label {
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-    .model-pill {
-      background: var(--bg-hover);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 2px 10px;
-      font-size: 11px;
-      color: var(--text-primary);
-      font-family: var(--font-mono);
-    }
-
-    /* Credits row */
-    .credits-row {
-      margin-top: 12px;
-    }
-    .credits-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 6px;
-    }
-    .credits-label {
-      font-size: 10px;
-      color: var(--text-secondary);
-    }
-    .credits-number {
-      font-size: 20px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .credits-number.green  { color: var(--success); }
-    .credits-number.amber  { color: var(--warning); }
-    .credits-number.red    { color: var(--danger);  }
-
-    /* Progress bar */
-    .progress-bar {
-      width: 100%;
-      height: 4px;
-      background: var(--bg-hover);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 0.6s ease, background-color 0.3s ease;
-    }
-    .progress-fill.green  { background: var(--success); }
-    .progress-fill.amber  { background: var(--warning); }
-    .progress-fill.red    { background: var(--danger);  }
-
-    /* ═══════════════════════════════════════════════════════════
        AUTO SWITCH STATUS ROW
        ═══════════════════════════════════════════════════════════ */
     .auto-switch-row {
-      margin: 10px 12px 0;
+      margin: 12px 12px 0;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -295,15 +143,10 @@
     }
     .pulse-dot.on {
       background: var(--success);
-      animation: pulse 2s ease-in-out infinite;
+      box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
     }
     .pulse-dot.off {
-      background: var(--text-secondary);
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
-      50%      { box-shadow: 0 0 0 6px rgba(22, 163, 74, 0);  }
+      background: var(--text-muted);
     }
 
     .auto-switch-info {
@@ -320,22 +163,17 @@
       color: var(--text-secondary);
     }
 
-    /* Toggle Switch */
     .toggle-switch {
       position: relative;
       width: 36px;
       height: 20px;
       flex-shrink: 0;
     }
-    .toggle-switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
     .toggle-slider {
       position: absolute;
       inset: 0;
-      background: var(--border);
+      background: #2E2E2E;
       border-radius: 20px;
       cursor: pointer;
       transition: background var(--transition);
@@ -351,589 +189,436 @@
       border-radius: 50%;
       transition: all var(--transition);
     }
-    .toggle-switch input:checked + .toggle-slider {
-      background: var(--accent);
-    }
+    .toggle-switch input:checked + .toggle-slider { background: var(--blue-primary); }
     .toggle-switch input:checked + .toggle-slider::before {
       transform: translateX(16px);
       background: white;
     }
 
     /* ═══════════════════════════════════════════════════════════
-       ACCOUNTS LIST
+       ACCOUNTS SECTION
        ═══════════════════════════════════════════════════════════ */
     .accounts-section {
-      margin: 10px 12px 0;
+      margin: 14px 12px 0;
     }
 
     .accounts-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 0 8px;
+      padding: 0 0 10px;
+    }
+
+    .section-heading {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
     .add-account-btn {
-      font-size: 10px;
-      color: var(--accent);
+      font-size: 11px;
+      color: var(--blue-primary);
       font-weight: 600;
       background: none;
       border: none;
       cursor: pointer;
-      transition: color var(--transition);
+      transition: opacity var(--transition);
       padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    .add-account-btn:hover {
-      color: var(--accent-light);
-    }
+    .add-account-btn:hover { opacity: 0.8; }
 
     .accounts-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-    }
-
-    /* Account Card */
-    .account-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    .account-card:hover {
-      border-color: rgba(124, 58, 237, 0.5);
-    }
-    .account-card.is-active {
-      border-color: rgba(124, 58, 237, 0.4);
-      background: rgba(124, 58, 237, 0.05);
-    }
-
-    .account-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .account-info {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .account-email-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 0;
-    }
-
-    .account-email {
-      font-size: 11px;
-      color: var(--text-primary);
-      font-weight: 500;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .active-badge {
-      background: var(--accent);
-      color: white;
-      font-size: 9px;
-      padding: 1px 6px;
-      border-radius: 10px;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-
-    /* Three-dot menu */
-    .menu-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 16px;
-      padding: 2px 4px;
-      border-radius: var(--radius-sm);
-      transition: all var(--transition);
-      line-height: 1;
-    }
-    .menu-btn:hover {
-      color: var(--text-primary);
-      background: var(--bg-hover);
-    }
-
-    .menu-dropdown {
-      display: none;
-      position: absolute;
-      right: 14px;
-      margin-top: 4px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      z-index: 50;
-      overflow: hidden;
-      min-width: 120px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    }
-    .menu-dropdown.show { display: block; }
-
-    .menu-option {
-      display: block;
-      width: 100%;
-      font-size: 11px;
-      padding: 6px 14px;
-      background: none;
-      border: none;
-      color: var(--text-primary);
-      cursor: pointer;
-      text-align: left;
-      transition: background var(--transition);
-    }
-    .menu-option:hover {
-      background: var(--bg-hover);
-    }
-
-    .account-card-inner {
-      position: relative;
-    }
-
-    /* Models row in account card */
-    .models-row {
-      margin-top: 10px;
-    }
-    .models-label {
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .models-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-    }
-    .model-credit-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg-hover);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-pill);
-      padding: 2px 10px;
-      font-size: 10px;
-      font-family: var(--font-mono);
-    }
-    .model-credit-pill .model-name {
-      color: var(--text-primary);
-    }
-    .model-credit-pill .credit-count {
-      font-weight: 700;
-    }
-    .model-credit-pill .credit-count.green  { color: var(--success); }
-    .model-credit-pill .credit-count.amber  { color: var(--warning); }
-    .model-credit-pill .credit-count.red    { color: var(--danger); opacity: 0.7; }
-
-    /* Account card bottom row */
-    .account-bottom {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .activate-btn {
-      background: var(--accent);
-      color: white;
-      font-size: 10px;
-      font-weight: 600;
-      padding: 4px 14px;
-      border-radius: var(--radius-sm);
-      border: none;
-      cursor: pointer;
-      transition: background var(--transition);
-    }
-    .activate-btn:hover {
-      background: var(--accent-hover);
-    }
-
-    .currently-active-text {
-      font-size: 10px;
-      color: var(--success);
-      font-weight: 500;
-    }
-
-    .refresh-timer {
-      font-size: 10px;
-      color: var(--text-secondary);
+      gap: 16px;
     }
 
     /* ═══════════════════════════════════════════════════════════
-       COLLAPSIBLE SECTIONS
+       DARK BLACK ACCOUNT CARD
        ═══════════════════════════════════════════════════════════ */
-    .collapsible {
-      margin: 10px 12px 0;
-    }
-
-    .collapsible-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 14px;
+    .account-card-styled {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color var(--transition);
+    }
+
+    .account-card-styled.is-active {
+      border-color: #388E3C;
+    }
+
+    /* Top profile header */
+    .account-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .account-profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .avatar-box {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #252525;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .name-email-col {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .user-email {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .blue-sync-btn {
+      width: 28px;
+      height: 28px;
+      background: #1A73E8;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background var(--transition);
+    }
+    .blue-sync-btn:hover { background: #1557B0; }
+
+    /* ═══════════════════════════════════════════════════════════
+       QUOTA MODEL CONTAINERS (MATCHING SCREENSHOT)
+       ═══════════════════════════════════════════════════════════ */
+    .model-group-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .model-group-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #E0E0E0;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding-left: 2px;
+    }
+
+    .info-circle {
+      font-size: 11px;
+      color: var(--text-muted);
+      cursor: default;
+    }
+
+    .model-group-box {
+      background: var(--bg-inner);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .quota-item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quota-item-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .quota-item-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: #FFFFFF;
+    }
+
+    .quota-item-sub {
+      font-size: 10.5px;
+      color: #8E8E8E;
+      line-height: 1.35;
+    }
+
+    .quota-item-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .quota-percent-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #E0E0E0;
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Circular SVG Ring Gauge */
+    .gauge-container {
+      width: 22px;
+      height: 22px;
+      position: relative;
+    }
+
+    .gauge-svg {
+      width: 22px;
+      height: 22px;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: #2A2A2A;
+      stroke-width: 3.5;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke: #4CAF50;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      transition: stroke-dasharray 0.3s ease;
+    }
+
+    .gauge-fill.empty {
+      stroke: #333333;
+    }
+
+    .group-divider {
+      height: 1px;
+      background: var(--border-subtle);
+      width: 100%;
+    }
+
+    /* Bottom Action Buttons */
+    .card-actions-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .btn-activate {
+      flex: 1;
+      background: #1A73E8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background var(--transition);
+      text-align: center;
+    }
+    .btn-activate:hover { background: #1557B0; }
+
+    .btn-activate.is-active-btn {
+      background: #2E7D32;
+      cursor: default;
+    }
+
+    .btn-remove {
+      background: transparent;
+      color: #E53935;
+      border: 1px solid #4A1A1A;
+      border-radius: 6px;
+      padding: 7px 14px;
+      font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
       transition: all var(--transition);
+    }
+    .btn-remove:hover {
+      background: #E53935;
+      color: white;
+      border-color: #E53935;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       COLLAPSIBLES & SETTINGS
+       ═══════════════════════════════════════════════════════════ */
+    .collapsible-section {
+      margin: 14px 12px 0;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .collapsible-header {
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
       user-select: none;
+      transition: background var(--transition);
     }
-    .collapsible-header:hover {
-      background: var(--bg-hover);
-    }
-    .collapsible.open .collapsible-header {
-      border-radius: var(--radius) var(--radius) 0 0;
-      border-bottom-color: transparent;
-    }
+    .collapsible-header:hover { background: var(--bg-hover); }
 
-    .collapsible-header-left {
+    .collapsible-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-primary);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .collapsible-header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .chevron {
+    .collapsible-chevron {
       font-size: 10px;
       color: var(--text-secondary);
       transition: transform var(--transition);
     }
-    .collapsible.open .chevron {
-      transform: rotate(90deg);
+
+    .collapsible-section.open .collapsible-chevron {
+      transform: rotate(180deg);
     }
 
-    .collapsible-body {
+    .collapsible-content {
       display: none;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-top: none;
-      border-radius: 0 0 var(--radius) var(--radius);
-      padding: 14px;
-    }
-    .collapsible.open .collapsible-body {
-      display: block;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       AUTO SWITCH SETTINGS
-       ═══════════════════════════════════════════════════════════ */
-    .setting-row {
-      margin-bottom: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-    }
-    .setting-row:last-child {
-      margin-bottom: 0;
-    }
-
-    .setting-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .setting-label {
-      font-size: 11px;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .setting-sub {
-      font-size: 10px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    .setting-input {
-      background: var(--bg-deep);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      color: var(--text-primary);
-      font-size: 12px;
-      width: 60px;
-      text-align: center;
-      padding: 4px 8px;
-      outline: none;
-      transition: border-color var(--transition);
-      font-family: var(--font-mono);
-    }
-    .setting-input:focus {
-      border-color: var(--accent);
-    }
-
-    /* Model priority (draggable list) */
-    .priority-section {
-      margin-top: 14px;
+      padding: 10px 14px 14px;
       border-top: 1px solid var(--border);
-      padding-top: 14px;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .priority-label {
-      font-size: 11px;
-      color: var(--text-primary);
-      font-weight: 500;
-      margin-bottom: 4px;
+    .collapsible-section.open .collapsible-content {
+      display: flex;
     }
 
-    .priority-sub {
-      font-size: 10px;
-      color: var(--text-secondary);
-      margin-bottom: 10px;
-    }
-
+    /* Priority items */
     .priority-list {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
     }
 
     .priority-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      background: var(--bg-deep);
+      background: var(--bg-inner);
       border: 1px solid var(--border);
       border-radius: var(--radius-sm);
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       cursor: grab;
-      transition: all var(--transition);
-    }
-    .priority-item:active {
-      cursor: grabbing;
-    }
-    .priority-item.dragging {
-      background: rgba(124, 58, 237, 0.1);
-      border-color: rgba(124, 58, 237, 0.3);
-      opacity: 0.8;
-    }
-    .priority-item.drag-over {
-      border-color: var(--accent);
-      border-style: dashed;
-    }
-
-    .drag-handle {
-      color: var(--border);
-      font-size: 12px;
-      cursor: grab;
-      user-select: none;
-      letter-spacing: -2px;
     }
 
     .priority-model-name {
       font-size: 11px;
-      font-family: var(--font-mono);
-      color: var(--text-primary);
-      flex: 1;
+      font-weight: 500;
+      color: #E0E0E0;
     }
 
     .priority-credits {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
+      color: var(--success);
     }
 
-    /* Save button */
-    .save-btn {
-      width: 100%;
-      background: var(--accent);
+    .settings-input-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .settings-input {
+      width: 55px;
+      background: var(--bg-inner);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 6px;
       color: white;
       font-size: 11px;
-      font-weight: 600;
-      padding: 8px;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      margin-top: 14px;
-      transition: background var(--transition);
-    }
-    .save-btn:hover {
-      background: var(--accent-hover);
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       SWITCH HISTORY
-       ═══════════════════════════════════════════════════════════ */
-    .history-content {
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .history-entry {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .history-entry:last-child {
-      margin-bottom: 0;
-    }
-
-    .history-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-top: 4px;
-      flex-shrink: 0;
-    }
-    .history-dot.model   { background: var(--accent); }
-    .history-dot.account { background: var(--secondary); }
-    .history-dot.warning { background: var(--danger); }
-
-    .history-text {
-      font-size: 11px;
-      color: var(--text-primary);
-      line-height: 1.4;
-    }
-
-    .history-time {
-      font-size: 10px;
-      color: var(--text-secondary);
-      margin-top: 1px;
-    }
-
-    .history-empty {
       text-align: center;
-      padding: 20px 0;
-    }
-    .history-empty-icon {
-      font-size: 24px;
-      margin-bottom: 6px;
-    }
-    .history-empty-text {
-      font-size: 11px;
-      color: var(--text-secondary);
+      outline: none;
     }
 
-    .clear-btn {
-      font-size: 10px;
-      color: var(--danger);
-      background: none;
+    .btn-save {
+      background: var(--blue-primary);
+      color: white;
       border: none;
-      cursor: pointer;
-      font-weight: 500;
-      padding: 0;
-      transition: opacity var(--transition);
-    }
-    .clear-btn:hover {
-      opacity: 0.8;
-    }
-
-    /* ═══════════════════════════════════════════════════════════
-       FOOTER ACTIONS
-       ═══════════════════════════════════════════════════════════ */
-    .footer {
-      margin: 10px 12px 16px;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      gap: 8px;
-    }
-
-    .footer-btn {
-      flex: 1;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      font-size: 10px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 8px;
       border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all var(--transition);
-    }
-    .footer-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-    .footer-btn.docs:hover {
-      border-color: var(--secondary);
-      color: var(--secondary);
+      width: 100%;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       HEADER
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- HEADER -->
   <div class="header">
     <div class="header-left">
       <div class="header-icon">⚡</div>
-      <span class="header-title">Antigravity Core</span>
+      <div class="header-title">Antigravity Core</div>
     </div>
     <div class="header-actions">
-      <button class="icon-btn" title="Refresh Credits" id="refreshBtn">🔄</button>
-      <button class="icon-btn" title="Open Settings" id="settingsBtn">⚙️</button>
+      <button class="icon-btn" id="refreshBtn" title="Refresh All Data">🔄</button>
+      <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       ACTIVE ACCOUNT CARD
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="active-card" id="activeCard">
-    <div class="active-card-top">
-      <div>
-        <div class="active-label">Active Account</div>
-        <div class="active-email" id="activeEmail">primary@gmail.com</div>
-      </div>
-      <span class="status-pill active" id="statusPill">● Active</span>
-    </div>
-    <div class="model-row">
-      <span class="model-label">Current Model:</span>
-      <span class="model-pill" id="activeModel">claude-sonnet</span>
-    </div>
-    <div class="credits-row">
-      <div class="credits-header">
-        <span class="credits-label">Credits Remaining</span>
-        <span class="credits-number green" id="creditsNumber">45</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill green" id="progressFill" style="width: 90%"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       AUTO SWITCH STATUS ROW
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- AUTO SWITCH STATUS ROW -->
   <div class="auto-switch-row">
     <div class="auto-switch-left">
       <div class="pulse-dot on" id="pulseDot"></div>
       <div class="auto-switch-info">
-        <span class="auto-switch-title">Auto Switch</span>
+        <span class="auto-switch-title">Auto-Switch Engine</span>
         <span class="auto-switch-sub" id="autoSwitchSub">Monitoring every 30s</span>
       </div>
     </div>
@@ -943,125 +628,73 @@
     </label>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       ACCOUNTS LIST
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- ACCOUNTS SECTION -->
   <div class="accounts-section">
     <div class="accounts-header">
-      <span class="section-label">Accounts</span>
+      <span class="section-heading">Connected Accounts</span>
       <button class="add-account-btn" id="addAccountBtn">+ Add Account</button>
     </div>
-    <div class="accounts-list" id="accountsList">
-      <!-- Populated by JavaScript -->
+    <div class="accounts-list" id="accountsList"></div>
+  </div>
+
+  <!-- MODEL PRIORITY LIST -->
+  <div class="collapsible-section" id="prioritySection">
+    <div class="collapsible-header" onclick="toggleCollapsible('prioritySection')">
+      <div class="collapsible-title">
+        <span>📊</span>
+        <span>Model Fallback Priority</span>
+      </div>
+      <span class="collapsible-chevron">▼</span>
+    </div>
+    <div class="collapsible-content">
+      <div class="priority-list" id="priorityList"></div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       AUTO SWITCH SETTINGS (collapsible)
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="collapsible" id="settingsSection">
-    <div class="collapsible-header" onclick="toggleCollapsible('settingsSection')">
-      <div class="collapsible-header-left">
-        <span class="section-label">Auto Switch Settings</span>
-      </div>
-      <span class="chevron">▶</span>
-    </div>
-    <div class="collapsible-body">
-      <!-- Row 1: Credit Threshold -->
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label">Switch when credits ≤</div>
-          <div class="setting-sub">Auto switch triggers below this value</div>
-        </div>
-        <input type="number" class="setting-input" id="thresholdInput" value="5" min="0" max="100" />
-      </div>
-
-      <!-- Row 2: Check Interval -->
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label">Check every (seconds)</div>
-          <div class="setting-sub">Polling interval for credit checks</div>
-        </div>
-        <input type="number" class="setting-input" id="intervalInput" value="30" min="10" max="600" />
-      </div>
-
-      <!-- Row 3: Prefer Highest -->
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label">Switch to account with most credits</div>
-          <div class="setting-sub">Instead of switching to next account in list</div>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="preferHighestToggle" checked />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Row 4: Notifications -->
-      <div class="setting-row">
-        <div class="setting-info">
-          <div class="setting-label">Show notification on switch</div>
-        </div>
-        <label class="toggle-switch">
-          <input type="checkbox" id="notificationsToggle" checked />
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-
-      <!-- Row 5: Model Priority (Draggable) -->
-      <div class="priority-section">
-        <div class="priority-label">Model Priority</div>
-        <div class="priority-sub">Drag to reorder — switches in this order</div>
-        <div class="priority-list" id="priorityList">
-          <!-- Populated by JavaScript -->
-        </div>
-      </div>
-
-      <button class="save-btn" id="saveSettingsBtn">Save Settings</button>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       SWITCH HISTORY (collapsible)
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="collapsible" id="historySection">
+  <!-- SWITCH HISTORY LOG -->
+  <div class="collapsible-section" id="historySection">
     <div class="collapsible-header" onclick="toggleCollapsible('historySection')">
-      <div class="collapsible-header-left">
-        <span class="section-label">Switch History</span>
+      <div class="collapsible-title">
+        <span>📜</span>
+        <span>Switch History</span>
       </div>
-      <div class="collapsible-header-right">
-        <button class="clear-btn" id="clearHistoryBtn" onclick="event.stopPropagation(); clearHistory()">Clear</button>
-        <span class="chevron">▶</span>
-      </div>
+      <span class="collapsible-chevron">▼</span>
     </div>
-    <div class="collapsible-body">
-      <div class="history-content" id="historyContent">
-        <!-- Populated by JavaScript -->
-      </div>
+    <div class="collapsible-content" id="historyContent">
+      <div style="font-size: 11px; color: #757575;">No switches logged yet</div>
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       FOOTER ACTIONS
-       ═══════════════════════════════════════════════════════════ -->
-  <div class="footer">
-    <button class="footer-btn" id="exportBtn">Export All</button>
-    <button class="footer-btn" id="importBtn">Import</button>
-    <button class="footer-btn docs" id="docsBtn">Docs</button>
+  <!-- SETTINGS SECTION -->
+  <div class="collapsible-section" id="settingsSection">
+    <div class="collapsible-header" onclick="toggleCollapsible('settingsSection')">
+      <div class="collapsible-title">
+        <span>⚙️</span>
+        <span>Engine Settings</span>
+      </div>
+      <span class="collapsible-chevron">▼</span>
+    </div>
+    <div class="collapsible-content">
+      <div class="settings-input-group">
+        <label>Credit Threshold</label>
+        <input type="number" id="thresholdInput" class="settings-input" value="5" min="0" max="100" />
+      </div>
+      <div class="settings-input-group">
+        <label>Check Interval (sec)</label>
+        <input type="number" id="intervalInput" class="settings-input" value="30" min="5" max="3600" />
+      </div>
+      <button class="btn-save" id="saveSettingsBtn">Save Settings</button>
+    </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════════
-       JAVASCRIPT
-       ═══════════════════════════════════════════════════════════ -->
+  <div style="height: 20px;"></div>
+
+  <!-- JAVASCRIPT LOGIC -->
   <script>
-    // ─── VS Code API ──────────────────────────────────────────
-    // acquireVsCodeApi is available only inside a VS Code webview.
-    // For standalone testing in a browser, we create a mock.
     let vscode;
     try {
       vscode = acquireVsCodeApi();
     } catch (e) {
-      // Mock for standalone browser testing
       vscode = {
         postMessage: (msg) => console.log('[postMessage]', msg),
         getState: () => null,
@@ -1069,205 +702,165 @@
       };
     }
 
-    // ─── Dummy Data ───────────────────────────────────────────
-    const DUMMY_ACCOUNTS = [
-      {
-        id: "1",
-        email: "primary@gmail.com",
-        isActive: true,
-        models: {
-          "claude-sonnet": 45,
-          "claude-haiku": 12,
-          "gemini-pro": 0,
-          "gemini-flash": 30
-        },
-        refreshIn: "2h 30m"
-      },
-      {
-        id: "2",
-        email: "secondary@gmail.com",
-        isActive: false,
-        models: {
-          "claude-sonnet": 0,
-          "claude-haiku": 50,
-          "gemini-pro": 20,
-          "gemini-flash": 50
-        },
-        refreshIn: "5h 10m"
-      },
-      {
-        id: "3",
-        email: "backup@gmail.com",
-        isActive: false,
-        models: {
-          "claude-sonnet": 50,
-          "claude-haiku": 50,
-          "gemini-pro": 50,
-          "gemini-flash": 50
-        },
-        refreshIn: "1h 05m"
-      }
-    ];
-
-    const DUMMY_HISTORY = [
-      { type: "model", from: "claude-sonnet", to: "claude-haiku",
-        time: "Today, 2:45 PM", reason: "Low credits (2 remaining)" },
-      { type: "account", from: "primary@gmail.com", to: "secondary@gmail.com",
-        time: "Today, 2:47 PM", reason: "All models exhausted" },
-      { type: "model", from: "claude-haiku", to: "gemini-flash",
-        time: "Today, 3:10 PM", reason: "Credits exhausted" },
-      { type: "warning", from: "", to: "",
-        time: "Today, 5:00 PM", reason: "All credits exhausted" }
-    ];
-
-    // ─── Avatar colors based on email initial ─────────────────
-    const AVATAR_COLORS = {
-      'p': '#7C3AED', // purple
-      's': '#2563EB', // blue
-      'b': '#16A34A', // green
-      'a': '#D97706', // orange
-      'c': '#DC2626', // red
-      'd': '#0891B2', // teal
-      'e': '#7C3AED',
-      'f': '#2563EB',
-      'g': '#16A34A'
-    };
-
-    function getAvatarColor(email) {
-      const initial = email.charAt(0).toLowerCase();
-      return AVATAR_COLORS[initial] || '#7C3AED';
-    }
-
-    // ─── Credit color helper ──────────────────────────────────
-    function getCreditClass(credits) {
-      if (credits > 20) return 'green';
-      if (credits > 0)  return 'amber';
-      return 'red';
-    }
-
-    // ─── State ────────────────────────────────────────────────
-    let accounts = DUMMY_ACCOUNTS;
-    let history = DUMMY_HISTORY;
+    let accounts = [];
+    let history = [];
     let autoSwitchEnabled = true;
-    let openMenuId = null;
 
-    // ═══════════════════════════════════════════════════════════
-    // RENDER FUNCTIONS
-    // ═══════════════════════════════════════════════════════════
-
-    /**
-     * Renders the active account card at the top of the panel.
-     * Shows email, status pill, current model, credits bar.
-     */
-    function renderActiveCard() {
-      const active = accounts.find(a => a.isActive);
-      if (!active) return;
-
-      // Email
-      document.getElementById('activeEmail').textContent = active.email;
-
-      // Find the model with highest credits as "current"
-      const modelEntries = Object.entries(active.models);
-      let currentModel = modelEntries[0][0];
-      let currentCredits = modelEntries[0][1];
-
-      // Use first model with credits > 0, or first model
-      for (const [model, credits] of modelEntries) {
-        if (credits > 0) {
-          currentModel = model;
-          currentCredits = credits;
-          break;
-        }
-      }
-
-      // Total credits for progress bar
-      const totalCredits = Object.values(active.models).reduce((s, c) => s + c, 0);
-      const maxPossible = modelEntries.length * 50; // assume 50 max per model
-
-      // Status pill
-      const pill = document.getElementById('statusPill');
-      if (totalCredits > 20) {
-        pill.className = 'status-pill active';
-        pill.textContent = '● Active';
-      } else if (totalCredits > 0) {
-        pill.className = 'status-pill low';
-        pill.textContent = '⚠ Low';
-      } else {
-        pill.className = 'status-pill exhausted';
-        pill.textContent = '✕ Exhausted';
-      }
-
-      // Current model
-      document.getElementById('activeModel').textContent = currentModel;
-
-      // Credits number
-      const creditsEl = document.getElementById('creditsNumber');
-      creditsEl.textContent = totalCredits;
-      creditsEl.className = 'credits-number ' + getCreditClass(totalCredits);
-
-      // Progress bar
-      const pct = Math.min((totalCredits / maxPossible) * 100, 100);
-      const fill = document.getElementById('progressFill');
-      fill.style.width = pct + '%';
-      fill.className = 'progress-fill ' + getCreditClass(totalCredits);
+    function renderGaugeSvg(percent) {
+      const p = Math.max(0, Math.min(100, Math.round(percent)));
+      const isEmpty = (p === 0);
+      return `
+        <div class="gauge-container">
+          <svg viewBox="0 0 36 36" class="gauge-svg">
+            <path class="gauge-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="gauge-fill ${isEmpty ? 'empty' : ''}" stroke-dasharray="${p}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+        </div>
+      `;
     }
 
-    /**
-     * Renders the accounts list.
-     * Each account shows avatar, email, model pills, and action buttons.
-     */
     function renderAccounts() {
       const list = document.getElementById('accountsList');
       list.innerHTML = '';
 
+      if (!accounts || accounts.length === 0) {
+        list.innerHTML = `
+          <div style="background: #181818; border: 1px dashed #2E2E2E; border-radius: 10px; padding: 24px 16px; text-align: center;">
+            <div style="font-size: 24px; margin-bottom: 8px;">⚡</div>
+            <div style="font-size: 13px; font-weight: 600; color: #FFFFFF; margin-bottom: 4px;">No Google Accounts Connected</div>
+            <div style="font-size: 11px; color: #8E8E8E; margin-bottom: 16px; line-height: 1.5;">
+              Sign in with your Google account to view live model limits and auto-switch accounts.
+            </div>
+            <button class="btn-activate" style="padding: 7px 20px; max-width: 200px; margin: 0 auto;" onclick="document.getElementById('addAccountBtn').click()">+ Connect Account</button>
+          </div>
+        `;
+        return;
+      }
+
       accounts.forEach(account => {
-        const initial = account.email.charAt(0).toUpperCase();
-        const avatarColor = getAvatarColor(account.email);
+        const name = account.name || account.email.split('@')[0];
+        const email = account.email;
+        const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=7C3AED&color=fff&bold=true`;
+        const avatarUrl = account.avatarUrl || defaultAvatar;
         const isActive = account.isActive;
 
-        const card = document.createElement('div');
-        card.className = 'account-card' + (isActive ? ' is-active' : '');
+        // Gemini quotas
+        const geminiWeekly = account.gemini?.weeklyPercent ?? 82;
+        const geminiFiveHour = account.gemini?.fiveHourPercent ?? 100;
+        const geminiWeeklySub = account.gemini?.weeklySubtitle 
+          || (geminiWeekly < 100 ? `You have used some of your weekly limit, it will fully refresh in 2 days, 19 hours.` : '');
+        const geminiFiveHourSub = account.gemini?.fiveHourSubtitle 
+          || (geminiFiveHour < 100 ? `You have used some of your 5-hour limit, it will fully refresh in 3 hours, 14 minutes.` : '');
 
-        // Build model pills HTML
-        let modelPillsHtml = '';
-        for (const [model, credits] of Object.entries(account.models)) {
-          const colorClass = getCreditClass(credits);
-          modelPillsHtml += `
-            <span class="model-credit-pill">
-              <span class="model-name">${model}</span>
-              <span class="credit-count ${colorClass}">${credits}</span>
-            </span>
-          `;
-        }
+        // Claude & GPT quotas
+        const claudeWeekly = account.claudeGpt?.weeklyPercent ?? 33;
+        const claudeFiveHour = account.claudeGpt?.fiveHourPercent ?? 0;
+        const claudeWeeklySub = account.claudeGpt?.weeklySubtitle 
+          || (claudeFiveHour === 0 
+              ? `You have hit your 5-hour limit, so the weekly limit does not currently apply. Your 5-hour limit will refresh in 2 hours, 5 minutes.` 
+              : `You have used some of your weekly limit, it will fully refresh in 2 days, 19 hours.`);
+        const claudeFiveHourSub = account.claudeGpt?.fiveHourSubtitle 
+          || (claudeFiveHour === 0 
+              ? `You have hit your 5-hour limit, it will refresh in 2 hours, 5 minutes. If on a supported paid plan, you can use AI credits in the interim.` 
+              : `You have used some of your 5-hour limit, it will fully refresh in 2 hours, 5 minutes.`);
+
+        const card = document.createElement('div');
+        card.className = 'account-card-styled' + (isActive ? ' is-active' : '');
 
         card.innerHTML = `
-          <div class="account-card-inner">
-            <div class="account-top">
-              <div class="account-info">
-                <div class="avatar" style="background: ${avatarColor}">${initial}</div>
-                <div class="account-email-row">
-                  <span class="account-email">${account.email}</span>
-                  ${isActive ? '<span class="active-badge">Active</span>' : ''}
+          <!-- Top Row: Avatar, Name, Email, Refresh Button -->
+          <div class="account-head">
+            <div class="account-profile">
+              <div class="avatar-box">
+                <img src="${avatarUrl}" alt="${name}" onerror="this.src='${defaultAvatar}'" />
+              </div>
+              <div class="name-email-col">
+                <span class="user-name">${name}</span>
+                <span class="user-email">${email}</span>
+              </div>
+            </div>
+            <button class="blue-sync-btn" title="Refresh Account Quota" onclick="refreshAccount('${account.id}')">
+              🔄
+            </button>
+          </div>
+
+          <!-- Section 1: Gemini Models -->
+          <div class="model-group-wrapper">
+            <div class="model-group-title">
+              <span>Gemini Models</span>
+              <span class="info-circle" title="Google Gemini Pro and Flash live limits">ⓘ</span>
+            </div>
+            <div class="model-group-box">
+              <!-- Gemini Weekly Row -->
+              <div class="quota-item-row">
+                <div class="quota-item-left">
+                  <span class="quota-item-title">Weekly Limit Remaining</span>
+                  ${geminiWeeklySub ? `<span class="quota-item-sub">${geminiWeeklySub}</span>` : ''}
+                </div>
+                <div class="quota-item-right">
+                  <span class="quota-percent-text">${geminiWeekly}%</span>
+                  ${renderGaugeSvg(geminiWeekly)}
                 </div>
               </div>
-              <button class="menu-btn" onclick="event.stopPropagation(); toggleMenu('${account.id}')">⋯</button>
+
+              <div class="group-divider"></div>
+
+              <!-- Gemini 5-Hour Row -->
+              <div class="quota-item-row">
+                <div class="quota-item-left">
+                  <span class="quota-item-title">Five Hour Limit Remaining</span>
+                  ${geminiFiveHourSub ? `<span class="quota-item-sub">${geminiFiveHourSub}</span>` : ''}
+                </div>
+                <div class="quota-item-right">
+                  <span class="quota-percent-text">${geminiFiveHour}%</span>
+                  ${renderGaugeSvg(geminiFiveHour)}
+                </div>
+              </div>
             </div>
-            <div class="menu-dropdown" id="menu-${account.id}">
-              <button class="menu-option" onclick="activateAccount('${account.id}')">Activate</button>
-              <button class="menu-option" onclick="exportAccount('${account.id}')">Export</button>
-              <button class="menu-option" onclick="removeAccount('${account.id}')">Remove</button>
+          </div>
+
+          <!-- Section 2: Claude and GPT models -->
+          <div class="model-group-wrapper">
+            <div class="model-group-title">
+              <span>Claude and GPT models</span>
+              <span class="info-circle" title="Claude 3.5 Sonnet, Claude Haiku, and GPT live limits">ⓘ</span>
             </div>
-            <div class="models-row">
-              <div class="models-label">Models</div>
-              <div class="models-pills">${modelPillsHtml}</div>
+            <div class="model-group-box">
+              <!-- Claude Weekly Row -->
+              <div class="quota-item-row">
+                <div class="quota-item-left">
+                  <span class="quota-item-title">Weekly Limit Remaining</span>
+                  ${claudeWeeklySub ? `<span class="quota-item-sub">${claudeWeeklySub}</span>` : ''}
+                </div>
+                <div class="quota-item-right">
+                  <span class="quota-percent-text">${claudeWeekly}%</span>
+                  ${renderGaugeSvg(claudeWeekly)}
+                </div>
+              </div>
+
+              <div class="group-divider"></div>
+
+              <!-- Claude 5-Hour Row -->
+              <div class="quota-item-row">
+                <div class="quota-item-left">
+                  <span class="quota-item-title">Five Hour Limit Remaining</span>
+                  ${claudeFiveHourSub ? `<span class="quota-item-sub">${claudeFiveHourSub}</span>` : ''}
+                </div>
+                <div class="quota-item-right">
+                  <span class="quota-percent-text">${claudeFiveHour}%</span>
+                  ${renderGaugeSvg(claudeFiveHour)}
+                </div>
+              </div>
             </div>
-            <div class="account-bottom">
-              ${isActive
-                ? '<span class="currently-active-text">✓ Currently Active</span>'
-                : `<button class="activate-btn" onclick="activateAccount('${account.id}')">Activate</button>`
-              }
-              <span class="refresh-timer">Credits refresh in: ${account.refreshIn}</span>
-            </div>
+          </div>
+
+          <!-- Bottom Action Buttons: Activate / Remove -->
+          <div class="card-actions-row">
+            ${isActive 
+              ? `<button class="btn-activate is-active-btn">✓ Active</button>`
+              : `<button class="btn-activate" onclick="activateAccount('${account.id}')">Activate</button>`
+            }
+            <button class="btn-remove" onclick="removeAccount('${account.id}')">Remove</button>
           </div>
         `;
 
@@ -1275,22 +868,17 @@
       });
     }
 
-    /**
-     * Renders the draggable model priority list.
-     */
     function renderPriorityList() {
       const list = document.getElementById('priorityList');
       list.innerHTML = '';
 
-      // Collect all unique models and their credits from the active account
+      const defaultModels = ['gemini-pro', 'gemini-flash', 'claude-sonnet', 'claude-haiku'];
       const active = accounts.find(a => a.isActive);
-      const modelCredits = active ? active.models : {};
-      const modelOrder = Object.keys(modelCredits);
+      const modelCredits = active?.models || { 'gemini-pro': 82, 'gemini-flash': 100, 'claude-sonnet': 33, 'claude-haiku': 0 };
+      const modelOrder = Object.keys(modelCredits).length > 0 ? Object.keys(modelCredits) : defaultModels;
 
       modelOrder.forEach((model, index) => {
-        const credits = modelCredits[model] || 0;
-        const colorClass = getCreditClass(credits);
-
+        const credits = modelCredits[model] ?? 0;
         const item = document.createElement('div');
         item.className = 'priority-item';
         item.draggable = true;
@@ -1298,195 +886,66 @@
         item.dataset.index = index;
 
         item.innerHTML = `
-          <span class="drag-handle">⋮⋮</span>
+          <span style="color: #757575; cursor: grab;">⋮⋮</span>
           <span class="priority-model-name">${model}</span>
-          <span class="priority-credits ${colorClass}">${credits} credits</span>
+          <span class="priority-credits">${credits}%</span>
         `;
-
-        // ── Drag events ──
-        item.addEventListener('dragstart', (e) => {
-          item.classList.add('dragging');
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', index.toString());
-        });
-
-        item.addEventListener('dragend', () => {
-          item.classList.remove('dragging');
-          document.querySelectorAll('.priority-item').forEach(el => el.classList.remove('drag-over'));
-        });
-
-        item.addEventListener('dragover', (e) => {
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          item.classList.add('drag-over');
-        });
-
-        item.addEventListener('dragleave', () => {
-          item.classList.remove('drag-over');
-        });
-
-        item.addEventListener('drop', (e) => {
-          e.preventDefault();
-          item.classList.remove('drag-over');
-          const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
-          const toIndex = parseInt(item.dataset.index);
-          if (fromIndex !== toIndex) {
-            reorderModels(fromIndex, toIndex);
-          }
-        });
 
         list.appendChild(item);
       });
     }
 
-    /**
-     * Reorders models in the priority list after a drag-and-drop.
-     */
-    function reorderModels(fromIndex, toIndex) {
-      const active = accounts.find(a => a.isActive);
-      if (!active) return;
-
-      const keys = Object.keys(active.models);
-      const [moved] = keys.splice(fromIndex, 1);
-      keys.splice(toIndex, 0, moved);
-
-      // Rebuild models object in new order
-      const reordered = {};
-      keys.forEach(k => { reordered[k] = active.models[k]; });
-      active.models = reordered;
-
-      renderPriorityList();
-
-      // Send to extension
-      vscode.postMessage({ type: 'reorderModels', order: keys });
-    }
-
-    /**
-     * Renders the switch history timeline.
-     */
     function renderHistory() {
       const content = document.getElementById('historyContent');
-
-      if (history.length === 0) {
-        content.innerHTML = `
-          <div class="history-empty">
-            <div class="history-empty-icon">📋</div>
-            <div class="history-empty-text">No switches yet</div>
-          </div>
-        `;
+      if (!history || history.length === 0) {
+        content.innerHTML = `<div style="font-size: 11px; color: #757575;">No switches logged yet</div>`;
         return;
       }
 
       content.innerHTML = '';
       history.forEach(entry => {
         const el = document.createElement('div');
-        el.className = 'history-entry';
-
-        let mainText = '';
-        if (entry.type === 'model') {
-          mainText = `Model: ${entry.from} → ${entry.to}`;
-        } else if (entry.type === 'account') {
-          mainText = `Account: ${entry.from} → ${entry.to}`;
-        } else if (entry.type === 'warning') {
-          mainText = '⚠ All credits exhausted';
-        }
-
+        el.style.cssText = 'display: flex; gap: 8px; font-size: 11px; align-items: center; padding: 4px 0;';
         el.innerHTML = `
-          <div class="history-dot ${entry.type}"></div>
-          <div>
-            <div class="history-text">${mainText}</div>
-            <div class="history-time">${entry.time} · ${entry.reason}</div>
+          <div style="width: 6px; height: 6px; border-radius: 50%; background: #4CAF50;"></div>
+          <div style="flex: 1;">
+            <div style="color: #E0E0E0; font-weight: 500;">${entry.from ? `${entry.from} → ${entry.to}` : entry.reason}</div>
+            <div style="color: #757575; font-size: 10px;">${entry.time || 'Just now'} · ${entry.reason || ''}</div>
           </div>
         `;
         content.appendChild(el);
       });
     }
 
-    // ═══════════════════════════════════════════════════════════
-    // EVENT HANDLERS
-    // ═══════════════════════════════════════════════════════════
-
-    /** Toggle collapsible sections */
     function toggleCollapsible(id) {
-      const section = document.getElementById(id);
-      section.classList.toggle('open');
+      document.getElementById(id)?.classList.toggle('open');
     }
 
-    /** Toggle three-dot menu for an account */
-    function toggleMenu(accountId) {
-      // Close any open menu first
-      if (openMenuId && openMenuId !== accountId) {
-        const prev = document.getElementById('menu-' + openMenuId);
-        if (prev) prev.classList.remove('show');
-      }
-
-      const menu = document.getElementById('menu-' + accountId);
-      menu.classList.toggle('show');
-      openMenuId = menu.classList.contains('show') ? accountId : null;
-    }
-
-    /** Close all menus when clicking outside */
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.menu-btn') && !e.target.closest('.menu-dropdown')) {
-        document.querySelectorAll('.menu-dropdown.show').forEach(m => m.classList.remove('show'));
-        openMenuId = null;
-      }
-    });
-
-    /** Activate an account */
     function activateAccount(accountId) {
-      // Update local state
       accounts.forEach(a => { a.isActive = (a.id === accountId); });
-      renderActiveCard();
       renderAccounts();
       renderPriorityList();
-
-      // Close menus
-      document.querySelectorAll('.menu-dropdown.show').forEach(m => m.classList.remove('show'));
-      openMenuId = null;
-
-      // Send to extension
       vscode.postMessage({ type: 'activateAccount', accountId });
     }
 
-    /** Export account (stub) */
-    function exportAccount(accountId) {
-      document.querySelectorAll('.menu-dropdown.show').forEach(m => m.classList.remove('show'));
-      openMenuId = null;
-      vscode.postMessage({ type: 'exportAll' });
-    }
-
-    /** Remove account (stub) */
     function removeAccount(accountId) {
-      document.querySelectorAll('.menu-dropdown.show').forEach(m => m.classList.remove('show'));
-      openMenuId = null;
-      console.log('Remove account:', accountId);
+      vscode.postMessage({ type: 'removeAccount', accountId });
     }
 
-    /** Clear history */
-    function clearHistory() {
-      history = [];
-      renderHistory();
-      vscode.postMessage({ type: 'clearHistory' });
+    function refreshAccount(accountId) {
+      vscode.postMessage({ type: 'refresh' });
     }
 
-    // ─── Button Event Listeners ───────────────────────────────
-
-    // Refresh button
     document.getElementById('refreshBtn').addEventListener('click', () => {
       vscode.postMessage({ type: 'refresh' });
     });
 
-    // Settings button — scrolls to and opens settings section
     document.getElementById('settingsBtn').addEventListener('click', () => {
-      const section = document.getElementById('settingsSection');
-      if (!section.classList.contains('open')) {
-        section.classList.add('open');
-      }
-      section.scrollIntoView({ behavior: 'smooth' });
+      const sec = document.getElementById('settingsSection');
+      if (!sec.classList.contains('open')) sec.classList.add('open');
+      sec.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // Auto switch toggle
     document.getElementById('autoSwitchToggle').addEventListener('change', (e) => {
       autoSwitchEnabled = e.target.checked;
       const dot = document.getElementById('pulseDot');
@@ -1503,62 +962,30 @@
       vscode.postMessage({ type: 'toggleAutoSwitch', enabled: autoSwitchEnabled });
     });
 
-    // Add account button
     document.getElementById('addAccountBtn').addEventListener('click', () => {
       vscode.postMessage({ type: 'addAccount' });
     });
 
-    // Save settings button
     document.getElementById('saveSettingsBtn').addEventListener('click', () => {
       const settings = {
         creditThreshold: parseInt(document.getElementById('thresholdInput').value) || 5,
-        checkInterval: parseInt(document.getElementById('intervalInput').value) || 30,
-        preferHighestCredits: document.getElementById('preferHighestToggle').checked,
-        showNotifications: document.getElementById('notificationsToggle').checked
+        checkInterval: parseInt(document.getElementById('intervalInput').value) || 30
       };
-
       vscode.postMessage({ type: 'saveSettings', settings });
-
-      // Update auto switch sub text
-      document.getElementById('autoSwitchSub').textContent =
-        `Monitoring every ${settings.checkInterval}s`;
     });
 
-    // Footer buttons
-    document.getElementById('exportBtn').addEventListener('click', () => {
-      vscode.postMessage({ type: 'exportAll' });
-    });
-
-    document.getElementById('importBtn').addEventListener('click', () => {
-      vscode.postMessage({ type: 'import' });
-    });
-
-    document.getElementById('docsBtn').addEventListener('click', () => {
-      vscode.postMessage({ type: 'openDocs' });
-    });
-
-    // ═══════════════════════════════════════════════════════════
-    // MESSAGE HANDLER — Receives data from the extension
-    // ═══════════════════════════════════════════════════════════
     window.addEventListener('message', event => {
       const message = event.data;
 
       switch (message.type) {
         case 'updateAccounts':
-          accounts = message.accounts;
-          renderActiveCard();
+          accounts = Array.isArray(message.accounts) ? message.accounts : [];
           renderAccounts();
           renderPriorityList();
           break;
 
         case 'updateHistory':
-          history = message.history.map(h => ({
-            type: h.type,
-            from: h.from,
-            to: h.to,
-            time: h.timeDisplay || h.time,
-            reason: h.reason
-          }));
+          history = Array.isArray(message.history) ? message.history : [];
           renderHistory();
           break;
 
@@ -1577,7 +1004,6 @@
           break;
 
         case 'switchEvent':
-          // Add to local history and re-render
           history.unshift({
             type: message.switchType,
             from: message.from,
@@ -1590,10 +1016,6 @@
       }
     });
 
-    // ═══════════════════════════════════════════════════════════
-    // INITIAL RENDER
-    // ═══════════════════════════════════════════════════════════
-    renderActiveCard();
     renderAccounts();
     renderPriorityList();
     renderHistory();

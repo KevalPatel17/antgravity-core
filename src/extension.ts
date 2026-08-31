@@ -20,6 +20,7 @@ import { AutoSwitchEngine } from './autoSwitch';
 import { SwitchHistory } from './historyLog';
 import { StatusBarManager } from './statusBar';
 import { saveModelPriority } from './modelPriority';
+import { AuthService } from './auth';
 
 // ─── Extension State ─────────────────────────────────────────
 
@@ -41,29 +42,32 @@ let webviewProvider: AntigravityWebviewProvider | undefined;
 export function activate(context: vscode.ExtensionContext): void {
     console.log('[Antigravity Core] Extension activating...');
 
-    // ══════════════════════════════════════════════════════════
-    // 1. Initialize Core Components
-    // ══════════════════════════════════════════════════════════
+    try {
+        // ══════════════════════════════════════════════════════════
+        // 1. Initialize Core Components
+        // ══════════════════════════════════════════════════════════
 
-    // Create the switch history logger (uses globalState for persistence)
-    switchHistory = new SwitchHistory(context.globalState);
+        // Create the switch history logger (uses globalState for persistence)
+        switchHistory = new SwitchHistory(context.globalState);
 
-    // Create the status bar manager (shows account/model/credits)
-    statusBarManager = new StatusBarManager();
-    context.subscriptions.push({ dispose: () => statusBarManager?.dispose() });
+        // Create the status bar manager (shows account/model/credits)
+        statusBarManager = new StatusBarManager();
+        context.subscriptions.push({ dispose: () => statusBarManager?.dispose() });
 
-    // Create the auto-switch engine (decision tree)
-    autoSwitchEngine = new AutoSwitchEngine(switchHistory, statusBarManager);
+        // Create the auto-switch engine (decision tree)
+        autoSwitchEngine = new AutoSwitchEngine(switchHistory, statusBarManager);
 
-    // Create the credit monitor (polling engine)
-    creditMonitor = new CreditMonitor();
-    context.subscriptions.push({ dispose: () => creditMonitor?.dispose() });
+        // Create the credit monitor with globalState for persistent account storage
+        creditMonitor = new CreditMonitor(context.globalState);
+        context.subscriptions.push({ dispose: () => creditMonitor?.dispose() });
 
-    // ══════════════════════════════════════════════════════════
-    // 2. Register Webview Provider (Sidebar Panel)
-    // ══════════════════════════════════════════════════════════
+        console.log('[Antigravity Core] Core components initialized successfully');
 
-    webviewProvider = new AntigravityWebviewProvider(context.extensionUri);
+        // ══════════════════════════════════════════════════════════
+        // 2. Register Webview Provider (Sidebar Panel)
+        // ══════════════════════════════════════════════════════════
+
+        webviewProvider = new AntigravityWebviewProvider(context.extensionUri);
 
     // Register the provider for the sidebar view
     const webviewRegistration = vscode.window.registerWebviewViewProvider(
@@ -110,14 +114,33 @@ export function activate(context: vscode.ExtensionContext): void {
          * Activate a specific account from the sidebar.
          */
         onActivateAccount: async (accountId: string) => {
-            const accounts = creditMonitor?.cachedAccounts ?? [];
-            const targetAccount = accounts.find(a => a.id === accountId);
-            const currentAccount = accounts.find(a => a.isActive);
+            await creditMonitor?.setActiveAccount(accountId);
+            refreshAll();
+            const account = creditMonitor?.cachedAccounts.find(a => a.id === accountId);
+            if (account) {
+                vscode.window.showInformationMessage(`⚡ Active account set to: ${account.email}`);
+            }
+        },
 
-            if (targetAccount && currentAccount && autoSwitchEngine) {
-                await autoSwitchEngine.performAccountSwitch(currentAccount, targetAccount);
-                // Refresh to show updated state
+        /**
+         * Remove an account from the sidebar.
+         */
+        onRemoveAccount: async (accountId: string) => {
+            const account = creditMonitor?.cachedAccounts.find(a => a.id === accountId);
+            if (!account) {
+                return;
+            }
+
+            const answer = await vscode.window.showWarningMessage(
+                `Remove account "${account.email}" from Antigravity Core?`,
+                { modal: true },
+                'Remove'
+            );
+
+            if (answer === 'Remove') {
+                await creditMonitor?.removeAccount(accountId);
                 refreshAll();
+                vscode.window.showInformationMessage(`⚡ Removed account: ${account.email}`);
             }
         },
 
@@ -159,7 +182,7 @@ export function activate(context: vscode.ExtensionContext): void {
         },
 
         /**
-         * Refresh all data from the database.
+         * Refresh all data from storage.
          */
         onRefresh: () => {
             refreshAll();
@@ -175,21 +198,35 @@ export function activate(context: vscode.ExtensionContext): void {
         },
 
         /**
-         * Add a new account (triggers browser auth flow).
+         * Add a new account (opens browser / Google sign-in directly).
          */
-        onAddAccount: () => {
-            // TODO: Implement actual auth flow
-            // For now, show an info message
-            vscode.window.showInformationMessage(
-                '⚡ Add Account: Browser auth flow would open here.',
-                'Open Browser'
-            ).then(action => {
-                if (action === 'Open Browser') {
-                    vscode.env.openExternal(
-                        vscode.Uri.parse('https://antigravity.dev/auth')
-                    );
+        onAddAccount: async () => {
+            vscode.window.showInformationMessage('⚡ Opening browser to connect your Antigravity Google account...');
+            
+            const newAccount = await AuthService.loginWithBrowser();
+
+            if (newAccount) {
+                const accounts = (await creditMonitor?.readAccountsFromDB()) || [];
+                const existingIdx = accounts.findIndex(
+                    a => a.email.toLowerCase() === newAccount.email.toLowerCase()
+                );
+
+                if (existingIdx >= 0) {
+                    accounts.forEach(a => { a.isActive = false; });
+                    accounts[existingIdx] = {
+                        ...accounts[existingIdx],
+                        ...newAccount,
+                        isActive: true
+                    };
+                    await creditMonitor?.saveAccounts(accounts);
+                } else {
+                    await creditMonitor?.addAccount(newAccount);
                 }
-            });
+
+                await creditMonitor?.checkActiveAccountCredits();
+                refreshAll();
+                vscode.window.showInformationMessage(`⚡ Connected Google Account: ${newAccount.email}`);
+            }
         },
 
         /**
@@ -206,9 +243,8 @@ export function activate(context: vscode.ExtensionContext): void {
                 version: '1.0.0'
             };
 
-            // Show save dialog
             const uri = await vscode.window.showSaveDialog({
-                defaultUri: vscode.Uri.file('antigravity-export.json'),
+                defaultUri: vscode.Uri.file('antigravity-core-export.json'),
                 filters: { 'JSON Files': ['json'] }
             });
 
@@ -239,12 +275,15 @@ export function activate(context: vscode.ExtensionContext): void {
                     const content = await vscode.workspace.fs.readFile(uris[0]);
                     const data = JSON.parse(Buffer.from(content).toString('utf8'));
 
-                    // TODO: Actually import the accounts into the Antigravity DB
-                    vscode.window.showInformationMessage(
-                        `⚡ Import: Found ${data.accounts?.length ?? 0} accounts in file.`
-                    );
-
-                    refreshAll();
+                    if (data && Array.isArray(data.accounts)) {
+                        await creditMonitor?.saveAccounts(data.accounts);
+                        refreshAll();
+                        vscode.window.showInformationMessage(
+                            `⚡ Imported ${data.accounts.length} accounts successfully.`
+                        );
+                    } else {
+                        vscode.window.showWarningMessage('⚠ No valid accounts array found in JSON file.');
+                    }
                 } catch (error) {
                     vscode.window.showErrorMessage(
                         '⚠ Failed to import: Invalid JSON file.'
@@ -280,10 +319,11 @@ export function activate(context: vscode.ExtensionContext): void {
 
         // Update status bar with active account info
         if (activeAccount && statusBarManager) {
-            // Find the model with credits (first one for now)
-            const firstModel = Object.keys(activeAccount.models)[0];
+            const firstModel = Object.keys(activeAccount.models)[0] || 'claude-sonnet';
             const firstCredits = activeAccount.models[firstModel] ?? 0;
             statusBarManager.update(activeAccount.email, firstModel, firstCredits);
+        } else if (statusBarManager) {
+            statusBarManager.showEmpty();
         }
     };
 
@@ -382,6 +422,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
     if (autoSwitchEnabled) {
         creditMonitor.startMonitoring();
+    } else {
+        // Initial load without active interval
+        creditMonitor.checkActiveAccountCredits();
     }
 
     // ══════════════════════════════════════════════════════════
@@ -390,7 +433,6 @@ export function activate(context: vscode.ExtensionContext): void {
 
     const configChangeListener = vscode.workspace.onDidChangeConfiguration(e => {
         if (e.affectsConfiguration('antigravityHub')) {
-            // Re-read settings and update components
             const config = vscode.workspace.getConfiguration('antigravityHub');
 
             const enabled = config.get<boolean>('autoSwitch.enabled', true);
@@ -408,9 +450,12 @@ export function activate(context: vscode.ExtensionContext): void {
             );
         }
     });
-    context.subscriptions.push(configChangeListener);
+        context.subscriptions.push(configChangeListener);
 
-    console.log('[Antigravity Core] Extension activated successfully!');
+        console.log('[Antigravity Core] Extension activated successfully!');
+    } catch (err) {
+        console.error('[Antigravity Core] Error during activation:', err);
+    }
 }
 
 // ─── Helper Functions ────────────────────────────────────────
@@ -419,14 +464,11 @@ export function activate(context: vscode.ExtensionContext): void {
  * Refreshes all data by triggering a credit check and updating the webview.
  */
 function refreshAll(): void {
-    // Trigger an immediate credit check
     creditMonitor?.checkActiveAccountCredits();
 
-    // Update history in the webview
     const history = switchHistory?.getHistory() ?? [];
     webviewProvider?.updateHistory(history);
 
-    // Update auto-switch status
     const config = vscode.workspace.getConfiguration('antigravityHub');
     webviewProvider?.updateAutoSwitchStatus(
         config.get<boolean>('autoSwitch.enabled', true),

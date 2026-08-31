@@ -141,6 +141,16 @@ export class StatusBarManager {
     }
 
     /**
+     * Shows default idle state in the status bar when no accounts are added.
+     */
+    showEmpty(): void {
+        this.statusBarItem.text = '$(zap) Antigravity Core';
+        this.statusBarItem.tooltip = 'Antigravity Core — Click to open sidebar';
+        this.statusBarItem.backgroundColor = undefined;
+        this.statusBarItem.show();
+    }
+
+    /**
      * Shows a warning state in the status bar when all credits are exhausted.
      */
     showExhausted(): void {
